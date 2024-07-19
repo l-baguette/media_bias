@@ -4,22 +4,23 @@ import adFontesMediaReliabilityRatings from './adFontesMediaReliabilityRatings.j
 
 async function getTopicsFromBackend(title, firstParagraph) {
     try {
-      const response = await fetch('https://mediabias-6z9ggwegx-bob-matadors-projects.vercel.app', { // Update with your Vercel app URL
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ title, firstParagraph })
-      });
-  
-      const data = await response.json();
-      console.log('Backend API Response:', data);
-      return data.topics || 'No topics found';
+        const response = await fetch('https://media-bias-hyl6qrjhj-bob-matadors-projects.vercel.app/get-topics', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ title, firstParagraph })
+        });
+
+        const data = await response.json();
+        console.log('Backend API Response:', data);
+        return data.topics || 'No topics found';
     } catch (error) {
-      console.error('Backend API Error:', error);
-      return 'Error fetching topics';
+        console.error('Backend API Error:', error);
+        return 'Error fetching topics';
     }
-  }
+}
+
   
   
 
