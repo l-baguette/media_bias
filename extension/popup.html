@@ -11,6 +11,10 @@
     #info {
       margin-top: 10px;
     }
+    small {
+      font-size: 12px;
+      font-weight: normal;
+    }
   </style>
 </head>
 <body>
@@ -19,8 +23,17 @@
     <p><strong>Publisher:</strong> <span id="publisher">Detecting...</span></p>
     <p><strong>Title:</strong> <span id="title">Detecting...</span></p>
     <p><strong>Topic:</strong> <span id="topic">Detecting...</span></p>
-    <p><strong>Bias:</strong> <span id="bias">Detecting...</span></p>
-    <p><strong>Reliability:</strong> <span id="reliability">Detecting...</span></p>
+    <p><strong>Bias:</strong> <span id="bias">Detecting... <small>(-2 to 2)</small></span></p>
+    <p><strong>Reliability:</strong> <span id="reliability">Detecting... <small>(0 to 100)</small></span></p>
+  </div>
+  <h3>Recommendation <small>(Article, Source, Bias, Reliability)</small></h3>
+  <p> </p>
+  <div id="recommendations">
+    <p id="rec1"><strong>#1 </strong> Detecting...</p>
+    <p id="rec2"><strong>#2 </strong> Detecting...</p>
+    <p id="rec3"><strong>#3 </strong> Detecting...</p>
+    <p id="rec4"><strong>#4 </strong> Detecting...</p>
+    <p id="rec5"><strong>#5 </strong> Detecting...</p>
   </div>
   <script src="dist/bundle.js"></script>
 </body>
