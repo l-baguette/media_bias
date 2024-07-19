@@ -22,7 +22,7 @@ app.post('/get-topics', async (req, res) => {
       messages: [
         {
           role: 'user',
-          content: `Identify the main topics of an article based on its title and first paragraph. Example topics include but are not limited to: events (e.g., the presidential election, investigations, etc.), people, companies, broad categories (e.g., Tech, politics, geopolitics, climate change, etc.), countries, etc. Return 3 to 4 words that describe the content of the article. ENSURE THAT YOU ONLY RETURN THE 3 TO 4 WORDS SEPARATED BY COMMAS, NO OTHER TEXT OR COMMENTARY. Title: ${title}\n\nFirst Paragraph: ${firstParagraph}`
+          content: `Identify the main topics of an article based on its title and first paragraph. Example topics include but are not limited to: events (e.g., the presidential election, investigations, etc.), people, companies, broad categories (e.g., Tech, politics, geopolitics, climate change, etc.), countries, etc. Return 3 to 4 words that describe the content of the article. ENSURE THAT YOU ONLY RETURN THE 3 TO 4 WORDS SEPARATED BY COMMAS, NO OTHER TEXT OR COMMENTARY. If there is a name, company, country, or any other proper now, ENSURE IT IS THE 4TH TOPIC! Title: ${title}\n\nFirst Paragraph: ${firstParagraph}`
         }
       ],
       model: 'llama3-8b-8192'
