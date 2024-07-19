@@ -6,7 +6,7 @@ const newsApiKey = 'e74e369c2c674a7e99a6d35b06232b8e';
 
 async function getTopicsFromBackend(title, firstParagraph) {
     try {
-        const response = await fetch('http://localhost:5001/get-topics', {
+        const response = await fetch('https://media-bias-jwfkuxnam-vedants-projects-ebf03764.vercel.app/get-topics', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
