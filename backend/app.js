@@ -48,7 +48,7 @@ app.post('/get-keywords', async (req, res) => {
         messages: [
           {
             role: 'user',
-            content: `Return to me any keywords of this title, including terminology, proper nouns (names, countries, places, etc.), or any other specific details. RETURN ONLY ALL THE KEYWORDS SEPARATED BY COMMAS, NO OTHER UNECESSARY DETAILS OR COMMENTARY! \nTitle: ${title}`
+            content: `Return to me any keywords of this title, including terminology, proper nouns (names, countries, places, etc.), or any other specific details SEPARATED BY COMMAS IN ONE LINE! ENSURE YOUR RESPONSE IS ONLY ONE LINE AND DOESN'T HAVE ANY EXTRA COMMENTARY, CATEGORIZATION, CHARACTERS, ETC.  \nTitle: ${title}`
           }
         ],
         model: 'llama3-8b-8192'

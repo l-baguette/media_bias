@@ -6,7 +6,7 @@ const newsApiKey = '7bc3405582d44b108101db9d4c3327d6';
 
 async function getTopicsFromBackend(title, firstParagraph) {
     try {
-        const response = await fetch('https://media-bias-psb5exo2y-vedants-projects-ebf03764.vercel.app/get-topics', {
+        const response = await fetch('https://media-bias-3v70roaaz-vedants-projects-ebf03764.vercel.app/get-topics', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -27,7 +27,7 @@ async function fetchRelatedArticles(title) {
     try {
         console.log("Fetching related articles");
         try {
-            const response = await fetch('https://media-bias-psb5exo2y-vedants-projects-ebf03764.vercel.app/get-keywords', {
+            const response = await fetch('https://media-bias-3v70roaaz-vedants-projects-ebf03764.vercel.app/get-keywords', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
