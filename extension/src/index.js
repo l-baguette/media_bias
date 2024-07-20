@@ -32,7 +32,7 @@ async function fetchRelatedArticles(title) {
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ title, firstParagraph })
+                body: JSON.stringify({ title })
             });
     
             const data = await response.json();
@@ -42,7 +42,7 @@ async function fetchRelatedArticles(title) {
             console.error('Backend API Error:', error);
         }
 
-        console.log(title);
+        console.log("tile", title);
         const response = await fetch(`https://newsapi.org/v2/everything?q=${encodeURIComponent(title)}&apiKey=${newsApiKey}`);
         const data = await response.json();
         return data.articles || [];
