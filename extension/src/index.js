@@ -6,7 +6,7 @@ const newsApiKey = '7bc3405582d44b108101db9d4c3327d6';
 
 async function getTopicsFromBackend(title, firstParagraph) {
     try {
-        const response = await fetch('https://media-bias-jwfkuxnam-vedants-projects-ebf03764.vercel.app/get-topics', {
+        const response = await fetch('https://media-bias-psb5exo2y-vedants-projects-ebf03764.vercel.app/get-topics', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -27,7 +27,7 @@ async function fetchRelatedArticles(title) {
     try {
         console.log("Fetching related articles");
         try {
-            const response = await fetch('https://media-bias-jwfkuxnam-vedants-projects-ebf03764.vercel.app/get-keywords', {
+            const response = await fetch('https://media-bias-psb5exo2y-vedants-projects-ebf03764.vercel.app/get-keywords', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -142,6 +142,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     document.getElementById('topic').innerText = 'Detecting...';
 
                     const topics = await getTopicsFromBackend(result.title, result.firstParagraph);
+                    console.log(topics);
                     document.getElementById('topic').innerText = topics;
 
                     const reliability = getReliability(result.publisher);

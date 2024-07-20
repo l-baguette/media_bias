@@ -48,7 +48,7 @@ app.post('/get-keywords', async (req, res) => {
         messages: [
           {
             role: 'user',
-            content: `Return to me any keywords of this title, including terminology, proper nouns (names, countries, places, etc.), or any other specific details.\nTitle: ${title}`
+            content: `Return to me any keywords of this title, including terminology, proper nouns (names, countries, places, etc.), or any other specific details. RETURN ONLY ALL THE KEYWORDS SEPARATED BY COMMAS, NO OTHER UNECESSARY DETAILS OR COMMENTARY! \nTitle: ${title}`
           }
         ],
         model: 'llama3-8b-8192'
