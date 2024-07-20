@@ -2,7 +2,7 @@ import allSidesNewsRatings from './allSidesNewsRatings.json';
 import mediaBiasFactCheckRatings from './mediaBiasFactCheckRatings.json';
 import adFontesMediaReliabilityRatings from './adFontesMediaReliabilityRatings.json';
 
-const newsApiKey = 'e74e369c2c674a7e99a6d35b06232b8e';
+const newsApiKey = '7bc3405582d44b108101db9d4c3327d6';
 
 async function getTopicsFromBackend(title, firstParagraph) {
     try {
@@ -26,6 +26,23 @@ async function getTopicsFromBackend(title, firstParagraph) {
 async function fetchRelatedArticles(title) {
     try {
         console.log("Fetching related articles");
+        try {
+            const response = await fetch('https://media-bias-jwfkuxnam-vedants-projects-ebf03764.vercel.app/get-keywords', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ title, firstParagraph })
+            });
+    
+            const data = await response.json();
+            console.log('Backend API Response:', data);
+            title = data.keywords
+        } catch (error) {
+            console.error('Backend API Error:', error);
+        }
+
+        console.log(title);
         const response = await fetch(`https://newsapi.org/v2/everything?q=${encodeURIComponent(title)}&apiKey=${newsApiKey}`);
         const data = await response.json();
         return data.articles || [];
@@ -51,7 +68,7 @@ function categorizeAndFilterArticles(articles) {
         const biasKey = bias !== 'N/A' ? bias.toString() : 'N/A';
         const strReliability = reliability !== 'N/A' ? reliability.toString() : 'N/A';
 
-        if (strReliability !== 'N/A' && biasKey !== "N/A" && categories[biasKey] === null) {
+        if (strReliability !== 'N/A' && biasKey !== "N/A" && (categories[biasKey] === null || reliability > categories[biasKey].reliability)) {
             categories[biasKey] = { article, source, reliability, bias };
         }
     });
@@ -61,11 +78,31 @@ function categorizeAndFilterArticles(articles) {
 
 function displayRecommendations(categories) {
     const recommendations = [];
+    const mostReliableArticles = [];
+
     ['2.0', '1.0', '0.0', '-1.0', '-2.0'].forEach(category => {
         if (categories[category]) {
             recommendations.push(categories[category]);
         }
     });
+
+    // Collect all articles and find the most reliable ones not already included
+    Object.values(categories).forEach(item => {
+        if (item) {
+            mostReliableArticles.push(item);
+        }
+    });
+
+    // Sort remaining articles by reliability and fill in the rest of the slots
+    mostReliableArticles.sort((a, b) => b.reliability - a.reliability);
+
+    for (let i = recommendations.length; i < 5; i++) {
+        if (mostReliableArticles[i]) {
+            recommendations.push(mostReliableArticles[i]);
+        } else {
+            break;
+        }
+    }
 
     for (let i = 0; i < 5; i++) {
         const recommendationContainer = document.getElementById(`rec${i + 1}`);

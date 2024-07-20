@@ -36,6 +36,28 @@ app.post('/get-topics', async (req, res) => {
   }
 });
 
+app.post('/get-keywords', async (req, res) => {
+    const { title } = req.body;
+  
+    try {
+      const response = await groq.chat.completions.create({
+        messages: [
+          {
+            role: 'user',
+            content: `Return to me any keywords of this title, including terminology, proper nouns (names, countries, places, etc.), or any other specific details.\n Title: ${title}`
+          }
+        ],
+        model: 'llama3-8b-8192'
+      });
+  
+      const keywords = response.choices[0]?.message?.content || 'No keywords found';
+      res.json({ keywords });
+    } catch (error) {
+      console.error('Error fetching topics from Groq API:', error);
+      res.status(500).json({ error: 'Error fetching topics' });
+    }
+  });
+
 // Specify a port number for the server
 const port = process.env.PORT || 5001;
 
