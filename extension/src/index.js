@@ -3,7 +3,7 @@ import mediaBiasFactCheckRatings from './mediaBiasFactCheckRatings.json';
 import adFontesMediaReliabilityRatings from './adFontesMediaReliabilityRatings.json';
 
 const newsApiKey = '7bc3405582d44b108101db9d4c3327d6';
-let vercelLink = "https://media-bias-khcury90z-vedants-projects-ebf03764.vercel.app";
+let vercelLink = "https://media-bias-5iwrlhcoe-vedants-projects-ebf03764.vercel.app";
 
 async function fetchWithRetry(url, options = {}, retries = 3, delay = 1000) {
     for (let i = 0; i < retries; i++) {
