@@ -3,18 +3,35 @@ import mediaBiasFactCheckRatings from './mediaBiasFactCheckRatings.json';
 import adFontesMediaReliabilityRatings from './adFontesMediaReliabilityRatings.json';
 
 const newsApiKey = '7bc3405582d44b108101db9d4c3327d6';
+let vercelLink = "https://media-bias-khcury90z-vedants-projects-ebf03764.vercel.app";
+
+async function fetchWithRetry(url, options = {}, retries = 3, delay = 1000) {
+    for (let i = 0; i < retries; i++) {
+        try {
+            const response = await fetch(url, options);
+            if (response.ok) {
+                return await response.json();
+            } else {
+                console.error(`Attempt ${i + 1} failed: ${response.statusText}`);
+            }
+        } catch (error) {
+            console.error(`Attempt ${i + 1} failed: ${error.message}`);
+        }
+        await new Promise(res => setTimeout(res, delay));
+    }
+    throw new Error('Failed to fetch data after multiple attempts');
+}
 
 async function getTopicsFromBackend(title, firstParagraph) {
+    console.log(vercelLink.concat('/get-topics'));
     try {
-        const response = await fetch('https://media-bias-3v70roaaz-vedants-projects-ebf03764.vercel.app/get-topics', {
+        const data = await fetchWithRetry(vercelLink.concat('/get-topics'), {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({ title, firstParagraph })
         });
-
-        const data = await response.json();
         console.log('Backend API Response:', data);
         return data.topics || 'No topics found';
     } catch (error) {
@@ -27,24 +44,21 @@ async function fetchRelatedArticles(title) {
     try {
         console.log("Fetching related articles");
         try {
-            const response = await fetch('https://media-bias-3v70roaaz-vedants-projects-ebf03764.vercel.app/get-keywords', {
+            const data = await fetchWithRetry(vercelLink.concat('/get-keywords'), {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({ title })
             });
-    
-            const data = await response.json();
             console.log('Backend API Response:', data);
-            title = data.keywords
+            title = data.keywords;
         } catch (error) {
             console.error('Backend API Error:', error);
         }
 
         console.log("tile", title);
-        const response = await fetch(`https://newsapi.org/v2/everything?q=${encodeURIComponent(title)}&apiKey=${newsApiKey}`);
-        const data = await response.json();
+        const data = await fetchWithRetry(`https://newsapi.org/v2/everything?q=${encodeURIComponent(title)}&apiKey=${newsApiKey}`);
         return data.articles || [];
     } catch (error) {
         console.error('Error fetching related articles:', error);
@@ -86,14 +100,12 @@ function displayRecommendations(categories) {
         }
     });
 
-    // Collect all articles and find the most reliable ones not already included
     Object.values(categories).forEach(item => {
         if (item) {
             mostReliableArticles.push(item);
         }
     });
 
-    // Sort remaining articles by reliability and fill in the rest of the slots
     mostReliableArticles.sort((a, b) => b.reliability - a.reliability);
 
     for (let i = recommendations.length; i < 5; i++) {

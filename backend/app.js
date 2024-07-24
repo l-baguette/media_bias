@@ -1,4 +1,5 @@
 const express = require('express');
+const cors = require('cors');
 const Groq = require('groq-sdk');
 
 // Create an instance of the express application
@@ -6,6 +7,9 @@ const app = express();
 
 // Use express.json middleware to parse JSON requests
 app.use(express.json());
+
+// Enable CORS
+app.use(cors());
 
 // Create an instance of Groq client with API key from environment variables
 const groq = new Groq({
@@ -36,32 +40,33 @@ app.post('/get-topics', async (req, res) => {
   }
 });
 
+// Define the /get-keywords route
 app.post('/get-keywords', async (req, res) => {
-    const { title } = req.body;
-  
-    if (!title) {
-      return res.status(400).json({ error: 'Title is required' });
-    }
-  
-    try {
-      const response = await groq.chat.completions.create({
-        messages: [
-          {
-            role: 'user',
-            content: `Return to me any keywords of this title, including terminology, proper nouns (names, countries, places, etc.), or any other specific details SEPARATED BY COMMAS IN ONE LINE! ENSURE YOUR RESPONSE IS ONLY ONE LINE AND DOESN'T HAVE ANY EXTRA COMMENTARY, CATEGORIZATION, CHARACTERS, ETC.  \nTitle: ${title}`
-          }
-        ],
-        model: 'llama3-8b-8192'
-      });
-  
-      const keywords = response.choices[0]?.message?.content || 'No keywords found';
-      res.json({ keywords });
-    } catch (error) {
-      console.error('Error fetching keywords from Groq API:', error);
-      res.status(500).json({ error: 'Error fetching keywords' });
-    }
-  });
-  
+  const { title } = req.body;
+
+  if (!title) {
+    return res.status(400).json({ error: 'Title is required' });
+  }
+
+  try {
+    const response = await groq.chat.completions.create({
+      messages: [
+        {
+          role: 'user',
+          content: `Return to me any keywords of this title, including terminology, proper nouns (names, countries, places, etc.), or any other specific details SEPARATED BY COMMAS IN ONE LINE! ENSURE YOUR RESPONSE IS ONLY ONE LINE AND DOESN'T HAVE ANY EXTRA COMMENTARY, CATEGORIZATION, CHARACTERS, ETC.  \nTitle: ${title}`
+        }
+      ],
+      model: 'llama3-8b-8192'
+    });
+
+    const keywords = response.choices[0]?.message?.content || 'No keywords found';
+    res.json({ keywords });
+  } catch (error) {
+    console.error('Error fetching keywords from Groq API:', error);
+    res.status(500).json({ error: 'Error fetching keywords' });
+  }
+});
+
 // Specify a port number for the server
 const port = process.env.PORT || 5001;
 
@@ -69,5 +74,3 @@ const port = process.env.PORT || 5001;
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
-
-
